@@ -3,14 +3,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { Component } from "react";
 import OrderModal from "./OrderModal";
 import orders from "./listOrders";
+
 export default class OrderList extends Component {
-  handlOrderDetail = (order) => {
-    console.log("the order is : ", order);
-    this.setState({ order: order, open: true });
-  };
-  handleClose = () => {
-    this.setState({ open: false });
-  };
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +12,16 @@ export default class OrderList extends Component {
       open: false,
     };
   }
+
+  handleOrderDetail = (order) => {
+    console.log("the order is : ", order);
+    this.setState({ order: order, open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const columns = [
       {
@@ -32,15 +36,16 @@ export default class OrderList extends Component {
         width: 400,
         description: "customer full name",
         renderCell: (params) => {
+          const firstNameInitial = params.row.customer.firstName.charAt(0);
+          const lastNameInitial = params.row.customer.lastName.charAt(0);
+          const initials = `${firstNameInitial}${lastNameInitial}`;
           return (
             <>
-              <Avatar alt="name" sx={{ width: 30, height: 30 }}>
-                Z
+              <Avatar alt="name" variant="square" sx={{ width: 30, height: 30, backgroundColor: '#1976d2', borderRadius: 1 }}>
+                {initials.toUpperCase()}
               </Avatar>
               <Typography variant="subtitle2" sx={{ mx: 3 }}>
-                {`${params.row.customer.firstName || ""} ${
-                  params.row.customer.lastName || ""
-                } `}
+                {`${params.row.customer.firstName || ""} ${params.row.customer.lastName || ""}`}
               </Typography>
             </>
           );
@@ -88,17 +93,50 @@ export default class OrderList extends Component {
       <Box
         sx={{
           margin: 3,
-          bgcolor: "white",
+          bgcolor: "#f9fafc", 
           borderRadius: 2,
           padding: 3,
           height: "100%",
+          display: 'flex',
+          flexDirection: 'column',
+          '@media (max-width:600px)': {
+            padding: 2,
+          },
         }}
       >
+        <Typography variant="h5" sx={{ m: 3, fontWeight: "bold" }}>
+            Order List
+        </Typography>
         <DataGrid
           sx={{
-            borderLeft: 0,
-            borderRight: 0,
-            borderRadius: 0,
+            boxShadow: 2,
+            border: 1,
+            borderColor: 'divider',
+            '&.MuiDataGrid-row:hover': {
+              backgroundColor: 'action.hover', 
+            },
+            '&.MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+              backgroundColor: 'grey.50', 
+            },
+            '&.MuiDataGrid-columnHeader': {
+              backgroundColor: 'secondary.main',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: 'secondary.dark', 
+              },
+            },
+            '&.MuiDataGrid-groupingRow': {
+              backgroundColor: 'action.selected',
+              cursor: 'pointer',
+              color: 'blue',
+              '&:active': {
+                backgroundColor: 'action.disabled', 
+              },
+            },
+            '@media (min-width:601px)': {
+              boxShadow: 3, 
+            },
           }}
           rows={orders}
           columns={columns}
@@ -111,7 +149,6 @@ export default class OrderList extends Component {
           rowSelection={false}
         />
         <Modal open={this.state.open} onClose={this.handleClose}>
-          {/*  */}
           <Box>
             <OrderModal order={this.state.order} />
           </Box>

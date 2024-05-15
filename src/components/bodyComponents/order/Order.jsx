@@ -1,13 +1,23 @@
-import React, { Component } from "react";
+import React from "react";
 import OrderList from "./OrderList";
-import { Box } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 
-export default class Order extends Component {
-  render() {
-    return (
-      <Box sx={{ m: 0, p: 3, width: "100%" }}>
+const Customer = () => {
+  return (
+   
+      <Box
+        sx={{
+          bgcolor: 'linear-gradient(135deg, #add8e6, #87ceeb)',
+          borderRadius: "10px",
+          padding: "20px",
+          boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+       
         <OrderList />
       </Box>
-    );
-  }
-}
+   
+  );
+};
+
+export default Customer;
